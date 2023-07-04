@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 public class Conflit {
-
+    // test
     private ArrayList<Cour> cours;
 
     private int duree;
