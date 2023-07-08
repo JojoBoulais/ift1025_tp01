@@ -1,51 +1,74 @@
-import java.util.Calendar;
+import java.time.LocalTime;
+import java.time.LocalDate;
 
 public class Sceance {
 
 
-    static String[] COUR_TYPES = {"théorique", "pratiques"};
+    static String[] COUR_TYPES = {"théorique", "pratiques", "examen"};
 
+    private LocalTime heureDebut;
+    private LocalTime heureFin;
     private Cour cour;
-
-    private int duree;
-
-    private String getJourEcole;
-
-    private int heureDebut;
-
-    private int heureFin;
-
+    private String jourEcole;
     private String type;
 
-    public Sceance() {
-
+    public Sceance(Cour cour) {
+    this.cour = cour;
     }
 
-    public static String[] getCourTypes() {
-        return COUR_TYPES;
-    }
 
-    public int getDuree() {
-        return duree;
+    public Sceance(Cour cour,
+                   int journeeSemaine,
+                   LocalTime heureDebut,
+                   LocalTime heureFin,
+                   String type)
+    {
+     this.cour = cour;
+     this.heureDebut = heureDebut;
+     this.heureFin = heureFin;
+     this.type = type;
     }
 
     public String getJourEcole() {
-        return this.getJourEcole;
+        return this.jourEcole;
     }
 
-    public int getHeureDebut() {
-        return heureDebut;
+    public LocalTime getHeureDebut() {
+        return this.heureDebut;
     }
 
-    public int getHeureFin() {
-        return heureFin;
+    public LocalTime getHeureFin() {
+        return this.heureFin;
     }
 
     public String getType() {
-        return type;
+        return this.type;
     }
 
     public Cour getCour() {
-        return cour;
+        return this.cour;
     }
+
+    public void setCour(Cour cour) {
+        this.cour = cour;
+    }
+
+    public void setJourEcole(String jourEcole) {
+        this.jourEcole = jourEcole;
+    }
+
+    public void setHeureDebut(int heure, int minute)
+    {
+        this.heureDebut = LocalTime.of(heure, minute);
+    }
+
+    public void setHeureFin(int heure, int minute)
+    {
+        this.heureFin = LocalTime.of(heure, minute);
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
 }

@@ -6,10 +6,12 @@ public class Horaire {
 
 
     static String[] SCHOOL_DAYS = {"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"};
+    static String[] SESSIONS = {"Hiver", "Ete", "Automne"};
 
+    private String session= "";
     private Calendar calendar;
 
-    private ArrayList<Cour> cours;
+    private ArrayList<Cour> cours = new ArrayList<Cour>();
 
     private ArrayList<Conflit> conflits;
 
@@ -26,12 +28,61 @@ public class Horaire {
         return cours;
     }
 
+    public String getSession()
+    {
+        return this.session;
+    }
+
     public void setCalendar(Calendar calendar) {
         this.calendar = calendar;
     }
 
     public void setCours(ArrayList<Cour> cours) {
         this.cours = cours;
+    }
+
+
+    public void setSession(String session)
+    {
+        for(String s : Horaire.SESSIONS)
+        {
+            if (s.equals(session))
+            {
+                this.session = session;
+                return;
+            }
+        }
+
+        return;
+    }
+
+
+    public int getSessionStartMonth()
+    {
+        if (this.session.equals(Horaire.SESSIONS[0])) {
+            return 0;
+        } else if (this.session.equals(Horaire.SESSIONS[1])) {
+            return 4;
+        }else if (this.session.equals(Horaire.SESSIONS[2])) {
+            return 8;
+        }
+
+        System.out.println("Pas de session setter");
+        return -1;
+    }
+
+    static public int getSessionStartMonth(String session)
+    {
+        if (session.equals(Horaire.SESSIONS[0])) {
+            return 0;
+        } else if (session.equals(Horaire.SESSIONS[1])) {
+            return 4;
+        }else if (session.equals(Horaire.SESSIONS[2])) {
+            return 8;
+        }
+
+        System.out.println("Pas de session setter");
+        return -1;
     }
 
 
@@ -89,7 +140,6 @@ public class Horaire {
 
     }
 
-
     public LinkedList<Sceance> sceancesJournee(String journee)
     {
         ArrayList<Sceance> sceances = new ArrayList<Sceance>();
@@ -145,6 +195,75 @@ public class Horaire {
 
     }
 
+    public int getCredits()
+    {
+        int credit=0;
+
+        for(Cour cour : this.cours)
+        {
+            credit += cour.getCredits();
+        }
+
+        return credit
+
+    }
+
+
+
+    public LinkedList<Conflit> getConflits(String journee)
+    {
+
+        LinkedList<Sceance> sceancesJournee = this.sceancesJournee(journee);
+        LinkedList<Conflit> conflits = new LinkedList<>();
+        int debutConflit = 0;
+        int finConflit = 0;
+        Conflit conflitActuel = null;
+        Sceance sceanceAnterieur = null;
+        for(Sceance sceance : sceancesJournee)
+        {
+            // Parce que les sceances sont deja classer on regarde
+            if((sceance.getHeureDebut() < finConflit)  |
+                    (sceance.getHeureDebut() == debutConflit && sceance.getHeureFin() == finConflit) |
+                    (sceance.getHeureDebut() < finConflit && sceance.getHeureFin() == finConflit))
+            {
+                if (conflitActuel == null) {
+                    conflitActuel = new Conflit();
+                    conflits.addLast(conflitActuel);
+                    conflitActuel.setHeureDebut(sceance.getHeureDebut());
+                    conflitActuel.setHeureFin(Math.min(sceance.getHeureFin(), finConflit));
+                }
+                // Plus que deux sceance peuvent etre dans un conflit
+                else {
+                    if (sceanceAnterieur.getHeureFin() == sceance.getHeureFin())
+                    {
+                        conflitActuel.setHeureFin(sceanceAnterieur.getHeureFin());
+                    }
+                    else {
+                        conflitActuel.setHeureFin(Math.min(sceance.getHeureFin(), finConflit));
+                    }
+                }
+
+                if (conflitActuel.getSceances().size() == 0)
+                {
+                    conflitActuel.addSceance(sceanceAnterieur);
+                }
+                conflitActuel.addSceance(sceance);
+                debutConflit = conflitActuel.getHeureDebut();
+                finConflit = conflitActuel.getHeureFin();
+
+            } else {
+                debutConflit = sceance.getHeureDebut();
+                finConflit = sceance.getHeureFin();
+                conflitActuel = null;
+            }
+
+            sceanceAnterieur = sceance;
+        }
+
+        return conflits;
+
+    }
+
 
     @Override
     public String toString() {
@@ -154,24 +273,47 @@ public class Horaire {
 
     for(String journee : Horaire.SCHOOL_DAYS)
     {
-        String current_day = journee + " :";
-        LinkedList<Sceance> sceances = this.sceancesJournee(journee);
+        String current_day ="";
+        for(int i=0; i < 200; i++){current_day += "-";}
+        current_day += "\n";
+        int number_of_space = 8 - journee.length();
 
+        String space = "";
+        for(int i=0; i < number_of_space; i++){space += " ";}
+
+        current_day += journee + space + " |";
+        LinkedList<Sceance> sceances = this.sceancesJournee(journee);
+        LinkedList<Conflit> conflits = this.getConflits(journee);
+
+        // Sceance de la journee
         for(Sceance sceance : sceances)
         {
 
-            current_day += " *" + sceance.getCour().getSigle()
-                    + sceance.getHeureDebut() + "-" + sceance.getHeureFin() + "* ";
+            current_day += " |" + sceance.getCour().getSigle() + ": "
+                    + sceance.getHeureDebut() + "h-" + sceance.getHeureFin() + "h| ";
 
         }
 
-        horaire += current_day + "\n\n";
+        // Conflit de la journee
+        if (conflits.size() > 0)
+        {
+            current_day += " * Conflits : ";
+
+            for (Conflit conflit : conflits) {
+
+                current_day += "| " + conflit.coursEnConflit() + conflit.getHeureDebut() + "h-" +
+                        conflit.getHeureFin() + "h | ";
+            }
+        }
+
+        horaire += current_day + "\n";
 
     }
+
+        for(int i=0; i < 200; i++){horaire += "-";}
 
     return horaire;
 
     }
-
 
 }
