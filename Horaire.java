@@ -1,9 +1,7 @@
-import java.util.Calendar;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Horaire {
-
 
     static String[] SCHOOL_DAYS = {"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"};
     static String[] SESSIONS = {"Hiver", "Ete", "Automne"};
@@ -12,9 +10,8 @@ public class Horaire {
     static int MAX_CREDIT = 15;
     private String session= "";
 
-    private ArrayList<Cour> cours = new ArrayList<Cour>();
+    private ArrayList<Cours> cours = new ArrayList<Cours>();
 
-    private ArrayList<Conflit> conflits;
 
     /**
      * Constructor de l'horaire
@@ -23,8 +20,8 @@ public class Horaire {
      */
     public Horaire(String session) throws IllegalArgumentException
     {
-        if (!session.equals(Horaire.SESSIONS[0]) && !session.equals(Horaire.SESSIONS[1]) &&
-                !session.equals(Horaire.SESSIONS[2]))
+        if (!session.equalsIgnoreCase(Horaire.SESSIONS[0]) && !session.equalsIgnoreCase(Horaire.SESSIONS[1]) &&
+                !session.equalsIgnoreCase(Horaire.SESSIONS[2]))
         {
             throw new IllegalArgumentException("***ERROR: Horaire doit etre sois `Hiver`, `Ete` ou `Automne`***");
         }
@@ -38,7 +35,7 @@ public class Horaire {
      *
      * @return attribut cours
      */
-    public ArrayList<Cour> getCours() {
+    public ArrayList<Cours> getCours() {
         return this.cours;
     }
 
@@ -57,7 +54,7 @@ public class Horaire {
      *
      * @param cours ArrayList de cours.
      */
-    public void setCours(ArrayList<Cour> cours) {
+    public void setCours(ArrayList<Cours> cours) {
         this.cours = cours;
     }
 
@@ -126,7 +123,7 @@ public class Horaire {
      *
      * @param cours Cours a ajouter a l'attribut cours.
      */
-    public void addCours(ArrayList<Cour> cours) {
+    public void addCours(ArrayList<Cours> cours) {
 
         if (cours.size() + this.cours.size() > Horaire.MAX_COURS)
         {
@@ -136,18 +133,18 @@ public class Horaire {
         }
 
         // Empeche d'ajouter deux fois le meme cour.
-        for(Cour cour : cours)
+        for(Cours cour : cours)
         {
             this.addCours(cour);
         }
     }
 
     /**
-     * Si un cour n'est pas deja present a l'horaire il est ajouter a l'attribut cours.
+     * Si un cours n'est pas deja present a l'horaire il est ajouter a l'attribut cours.
      *
-     * @param cour Cours a ajouter a l'attribut cour.
+     * @param cours Cours a ajouter a l'attribut cours.
      */
-    public void addCours(Cour cour) {
+    public void addCours(Cours cours) {
 
         if (this.cours.size() == Horaire.MAX_COURS)
         {
@@ -156,14 +153,14 @@ public class Horaire {
             return;
         }
 
-        Cour cour_trouver = this.trouverCour(cour.getSigle());
-        if (cour_trouver == null)
+        Cours cours_trouver = this.trouverCour(cours.getSigle());
+        if (cours_trouver == null)
         {
-            this.cours.add(cour);
+            this.cours.add(cours);
             return;
         }
 
-        System.out.println("Cour deja present a l'horaire");
+        System.out.println("Cours deja present a l'horaire");
     }
 
     /**
@@ -173,28 +170,28 @@ public class Horaire {
      */
     public void supprimerCour(String sigle) {
 
-        Cour cour = this.trouverCour(sigle);
-        if (cour != null)
+        Cours cours = this.trouverCour(sigle);
+        if (cours != null)
         {
-            this.cours.remove(cour);
+            this.cours.remove(cours);
             return;
         }
 
-        System.out.println("Cour non present a l'horaire");
+        System.out.println("Cours non present a l'horaire");
     }
 
     /**
      * Trouver un cour a l'horaire selon le sigle du cour.
      *
      * @param sigle sigle du cour a trouver
-     * @return Cour trouver ou null.
+     * @return Cours trouver ou null.
      */
-    public Cour trouverCour(String sigle) {
+    public Cours trouverCour(String sigle) {
 
-        for (Cour cour : this.cours) {
+        for (Cours cours : this.cours) {
 
-            if (cour.getSigle().equals(sigle)) {
-                return cour;
+            if (cours.getSigle().equalsIgnoreCase(sigle)) {
+                return cours;
             }
         }
 
@@ -210,9 +207,9 @@ public class Horaire {
     {
         int credit=0;
 
-        for(Cour cour : this.cours)
+        for(Cours cours : this.cours)
         {
-            credit += cour.getCredits();
+            credit += cours.getCredits();
         }
 
         return credit;
@@ -233,10 +230,10 @@ public class Horaire {
     {
         ArrayList<Sceance> sceances = new ArrayList<Sceance>();
         LinkedList<Sceance> sceancesSorted = new LinkedList<Sceance>();
-        for (Cour cour : this.cours)
+        for (Cours cours : this.cours)
         {
 
-            for(Sceance sceance : cour.getSceances())
+            for(Sceance sceance : cours.getSceances())
             {
 
                 if(sceance.getJourEcole().equals(journee)
@@ -388,7 +385,7 @@ public class Horaire {
         for(String journee : Horaire.SCHOOL_DAYS)
         {
             String current_day ="";
-            for(int i=0; i < 100; i++){current_day += "-";}
+            for(int i=0; i < 150; i++){current_day += "-";}
             current_day += "\n";
             int number_of_space = 8 - journee.length();
 
@@ -403,8 +400,8 @@ public class Horaire {
             for(Sceance sceance : sceances)
             {
                 sceanceCounter += 1;
-                current_day += " |" + sceance.getCour().getSigle() + ": "
-                        + sceance.getHeureDebut() + "h-" + sceance.getHeureFin() + "h| ";
+                current_day += " |" + sceance.getCours().getSigle() + ": "
+                        + sceance.getHeureDebut() + "h-" + sceance.getHeureFin() + "h " + sceance.getType() + " | ";
 
                 if (sceanceCounter == 3)
                 {
@@ -430,7 +427,7 @@ public class Horaire {
 
         }
 
-        for(int i=0; i < 100; i++){horaire += "-";}
+        for(int i=0; i < 150; i++){horaire += "-";}
 
         horaire += this.getConflitWarning(mois, semaine);
         horaire += this.getCreditWarning();

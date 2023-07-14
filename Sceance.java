@@ -7,18 +7,17 @@ public class Sceance {
     static String SCEANCE_EXAMEN = "Examen";
     private LocalTime heureDebut;
     private LocalTime heureFin;
-    private Cour cour;
+    private Cours cours;
     private int mois;
     private int semaine;
     private String jourEcole;
     private String type;
 
-    public Sceance(Cour cour) {
-    this.cour = cour;
+    public Sceance(Cours cours) {
+    this.cours = cours;
     }
 
-
-    public Sceance(Cour cour,
+    public Sceance(Cours cours,
                    String jourEcole,
                    LocalTime heureDebut,
                    LocalTime heureFin,
@@ -29,18 +28,18 @@ public class Sceance {
         if(heureFin.isBefore(heureDebut))
         {
             throw new IllegalArgumentException("***ERROR: heureDebut dois etre avant heureFin***");
-        } else if (!type.equals(Sceance.SCEANCE_TYPES[0]) && !type.equals(Sceance.SCEANCE_TYPES[1])
-                    && !type.equals(Sceance.SCEANCE_EXAMEN)) {
+        } else if (!type.equalsIgnoreCase(Sceance.SCEANCE_TYPES[0]) && !type.equalsIgnoreCase(Sceance.SCEANCE_TYPES[1])
+                    && !type.equalsIgnoreCase(Sceance.SCEANCE_EXAMEN)) {
             throw new IllegalArgumentException("***ERROR: type doit etre sois Theorique ou Pratique ou Examen***");
-        } else if (!jourEcole.equals(Horaire.SCHOOL_DAYS[0]) && !jourEcole.equals(Horaire.SCHOOL_DAYS[1]) &&
-                    !jourEcole.equals(Horaire.SCHOOL_DAYS[2]) && !jourEcole.equals(Horaire.SCHOOL_DAYS[3]) &&
-                    !jourEcole.equals(Horaire.SCHOOL_DAYS[4]))
+        } else if (!jourEcole.equalsIgnoreCase(Horaire.SCHOOL_DAYS[0]) && !jourEcole.equalsIgnoreCase(Horaire.SCHOOL_DAYS[1]) &&
+                    !jourEcole.equalsIgnoreCase(Horaire.SCHOOL_DAYS[2]) && !jourEcole.equalsIgnoreCase(Horaire.SCHOOL_DAYS[3]) &&
+                    !jourEcole.equalsIgnoreCase(Horaire.SCHOOL_DAYS[4]))
         {
             throw new IllegalArgumentException("***ERROR: jourEcole doit etre une journee de la semaine.***");
         }
 
         this.jourEcole = jourEcole;
-     this.cour = cour;
+     this.cours = cours;
      this.heureDebut = heureDebut;
      this.heureFin = heureFin;
      this.type = type;
@@ -85,12 +84,12 @@ public class Sceance {
     }
 
     /**
-     * Getter attribut cour.
+     * Getter attribut cours.
      *
-     * @return attribut cour
+     * @return attribut cours
      */
-    public Cour getCour() {
-        return this.cour;
+    public Cours getCours() {
+        return this.cours;
     }
 
     /**
@@ -134,16 +133,16 @@ public class Sceance {
     }
 
     /**
-     * Setter attribut cour.
+     * Setter attribut cours.
      *
-     * @param cour Cour a setter.
+     * @param cours Cours a setter.
      */
-    public void setCour(Cour cour) {
-        this.cour = cour;
+    public void setCours(Cours cours) {
+        this.cours = cours;
     }
 
     /**
-     * Setter attribut cour.
+     * Setter attribut cours.
      *
      * @param jourEcole JourEcole a setter.
      */
@@ -163,12 +162,10 @@ public class Sceance {
     /**
      * Setter attribut heureDebut.
      *
-     * @param heure Heure a setter.
-     * @param minute Minute a setter.
+     * @param heureDebut Heure a setter.
      */
-    public void setHeureDebut(int heure, int minute) throws IllegalArgumentException
+    public void setHeureDebut(LocalTime heureDebut) throws IllegalArgumentException
     {
-        LocalTime heureDebut = LocalTime.of(heure, minute);
         if (!(this.heureFin == null) && this.heureFin.isBefore(heureDebut))
         {
             throw new IllegalArgumentException("***ERROR: heureDebut dois etre avant heureFin***");
@@ -180,13 +177,11 @@ public class Sceance {
     /**
      * Setter attribut heureFin.
      *
-     * @param heure Heure a setter.
-     * @param minute Minute a setter.
+     * @param heureFin Heure a setter.
      */
-    public void setHeureFin(int heure, int minute) throws IllegalArgumentException
+    public void setHeureFin(LocalTime heureFin) throws IllegalArgumentException
     {
 
-        LocalTime heureFin = LocalTime.of(heure, minute);
         if (!(this.heureDebut == null) && heureFin.isBefore(this.heureDebut))
         {
             throw new IllegalArgumentException("***ERROR: heureDebut dois etre avant heureFin***");

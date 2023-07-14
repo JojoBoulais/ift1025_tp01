@@ -1,7 +1,4 @@
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.LinkedList;
 
@@ -22,7 +19,7 @@ public class Main {
             horaire = new Horaire(Horaire.SESSIONS[0]);
         }
 
-        Cour ift1025 = new Cour("IFT", 1025, 3,
+        Cours ift1025 = new Cours("IFT", 1025, 3,
                 horaire.getMoisDebutSession(), horaire.getMoisFinSession());
         ift1025.addSceances("Lundi",
                 LocalTime.of(10,0),
@@ -32,61 +29,61 @@ public class Main {
                 LocalTime.of(10,0),
                 LocalTime.of(12,0),
                 Sceance.SCEANCE_TYPES[1]);
-        Cour ift1015 = new Cour("IFT", 1015, 3,
+        Cours ift1015 = new Cours("IFT", 1015, 3,
                 horaire.getMoisDebutSession(), horaire.getMoisFinSession());
         ift1015.addSceances("Lundi",
                 LocalTime.of(11,0),
                 LocalTime.of(13,0),
                 Sceance.SCEANCE_TYPES[0]);
-        Cour ift1005 = new Cour("IFT", 1005, 3,
+        Cours ift1005 = new Cours("IFT", 1005, 3,
                 horaire.getMoisDebutSession(), horaire.getMoisFinSession());
         ift1005.addSceances("Lundi",
                 LocalTime.of(13,0),
                 LocalTime.of(15,0),
                 Sceance.SCEANCE_TYPES[1]);
-        Cour ift2015 = new Cour("IFT", 2015, 3,
+        Cours ift2015 = new Cours("IFT", 2015, 3,
                 horaire.getMoisDebutSession(), horaire.getMoisFinSession());
         ift2015.addSceances("Lundi",
                 LocalTime.of(15,0),
                 LocalTime.of(16,0),
                 Sceance.SCEANCE_TYPES[1]);
-        Cour ift2035 = new Cour("IFT", 2035, 3,
+        Cours ift2035 = new Cours("IFT", 2035, 3,
                 horaire.getMoisDebutSession(), horaire.getMoisFinSession());
         ift2035.addSceances("Lundi",
                 LocalTime.of(16,30),
                 LocalTime.of(18,30),
                 Sceance.SCEANCE_TYPES[1]);
-        Cour ift1215 = new Cour("IFT", 1215, 3,
+        Cours ift1215 = new Cours("IFT", 1215, 3,
                 horaire.getMoisDebutSession(), horaire.getMoisFinSession());
         ift1215.addSceances("Mardi",
                 LocalTime.of(8,30),
                 LocalTime.of(11,30),
                 Sceance.SCEANCE_TYPES[1]);
-        Cour ift1227 = new Cour("IFT", 1227, 3,
+        Cours ift1227 = new Cours("IFT", 1227, 3,
                 horaire.getMoisDebutSession(), horaire.getMoisFinSession());
         ift1227.addSceances("Mardi",
                 LocalTime.of(12,30),
                 LocalTime.of(14,30),
                 Sceance.SCEANCE_TYPES[1]);
-        Cour ift2245 = new Cour("IFT", 2245, 3,
+        Cours ift2245 = new Cours("IFT", 2245, 3,
                 horaire.getMoisDebutSession(), horaire.getMoisFinSession());
         ift2245.addSceances("Jeudi",
                 LocalTime.of(12,0),
                 LocalTime.of(16,0),
                 Sceance.SCEANCE_TYPES[1]);
-        Cour ift2255 = new Cour("IFT", 2255, 3,
+        Cours ift2255 = new Cours("IFT", 2255, 3,
                 horaire.getMoisDebutSession(), horaire.getMoisFinSession());
         ift2255.addSceances("Jeudi",
                 LocalTime.of(10,0),
                 LocalTime.of(13,0),
                 Sceance.SCEANCE_TYPES[1]);
-        Cour ift1065 = new Cour("IFT", 1065, 3,
+        Cours ift1065 = new Cours("IFT", 1065, 3,
                 horaire.getMoisDebutSession(), horaire.getMoisFinSession());
         ift1065.addSceances("Vendredi",
                 LocalTime.of(9,0),
                 LocalTime.of(13,0),
                 Sceance.SCEANCE_TYPES[1]);
-        Cour ift1575 = new Cour("IFT", 1575, 3,
+        Cours ift1575 = new Cours("IFT", 1575, 3,
                 horaire.getMoisDebutSession(), horaire.getMoisFinSession());
         ift1575.addSceances("Vendredi",
                 LocalTime.of(13,0),
@@ -124,9 +121,9 @@ public class Main {
         }
 
 
-        // Verification attributs Cour
+        // Verification attributs Cours
         //
-        System.out.println("\n---| Verification attributs Cour |---\n");
+        System.out.println("\n---| Verification attributs Cours |---\n");
         if (ift1025.getSceances().size() == 2*4*4)
         {
             System.out.println("ift1025 contient 32 sceances\n");
@@ -167,7 +164,7 @@ public class Main {
                 LocalTime.of(15,0),
                 2,4);
 
-        Sceance examen = ift1025.getSceances(2,4,"Mercredi", LocalTime.of(13,0)).get(0);
+        Sceance examen = ift1025.getInstanceSceance(2,4,"Mercredi", LocalTime.of(13,0));
         if (ift1025.getSceances().size() == 2*4*4 + 1 &&
                 examen.getType().equals("Examen")
         )
@@ -210,7 +207,7 @@ public class Main {
         {
             System.out.println("Premiere sceance de ift1025 est Theorique\n");
         }
-        Sceance premiereInstanceSceance = ift1025.getSceances(1,1,"Lundi", LocalTime.of(10, 0)).get(0);
+        Sceance premiereInstanceSceance = ift1025.getInstanceSceance(1,1,"Lundi", LocalTime.of(10, 0));
         if (premiereInstanceSceance.getMois() == 1 &&
                 premiereInstanceSceance.getSemaine() == 1 &&
                 premiereInstanceSceance.getJourEcole().equals("Lundi"))
@@ -222,7 +219,7 @@ public class Main {
         // Verification attributs Horaire
         //
         System.out.println("\n---| Verification attributs Horaire |---\n");
-        ArrayList<Cour> cours = new ArrayList<Cour>();
+        ArrayList<Cours> cours = new ArrayList<Cours>();
 
         // Ajout de 11 cour (10 maximum)
         cours.add(ift1025);
@@ -265,7 +262,7 @@ public class Main {
 
 
         System.out.println("\nTest trouverCour");
-        Cour ift1005trouver = horaire.trouverCour("IFT1025");
+        Cours ift1005trouver = horaire.trouverCour("IFT1025");
         if (ift1005trouver.getSigle().equals("IFT1025"))
         {
             System.out.println("\n IFT1025 Trouver a l'horaire");
@@ -292,7 +289,8 @@ public class Main {
         System.out.println("\n(Occasionne volontairement un troisieme conflit)\n");
         Sceance instanceAModifier = ift1005.getInstanceSceance(1,1,
                                     "Lundi", LocalTime.of(13,0));
-        instanceAModifier.setHeureDebut(12, 0);
+
+        instanceAModifier.setHeureDebut(LocalTime.of(12, 0));
         if (horaire.getConflitSemaine(1,1).size() == 3)
         {
             System.out.println("Actuellement 3 conflits");
@@ -300,7 +298,7 @@ public class Main {
                     horaire.getConflitWarning(1,1));
         }
 
-        instanceAModifier.setHeureDebut(12, 0);
+        instanceAModifier.setHeureDebut(LocalTime.of(12, 0));
 
         System.out.println("Test getConflits");
         if (horaire.getConflits(1,1, "Lundi").size() == 2)
@@ -319,7 +317,6 @@ public class Main {
 
         System.out.println(horaire.printSemaine(1, 1));
 
-
         System.out.println("\n\nEXEMPLE AFFICHAGE D'UNE SEMAINE (MOIS: 2 SEMAINE: 1) (2 Conflits)\n");
 
         System.out.println(horaire.printSemaine(2, 1));
@@ -331,6 +328,5 @@ public class Main {
 
         // IMPLEMENTER TRAVAIL ABDEL
         // FAIRE RAPPORT
-        // DISTANCE ENTRE EXAMENS... a voir
     }
 }

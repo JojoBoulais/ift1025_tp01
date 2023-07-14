@@ -111,7 +111,7 @@ public class Conflit {
 
         for(Sceance sceance : this.sceances)
         {
-            conflits += sceance.getCour().getSigle() + " ";
+            conflits += sceance.getCours().getSigle() + " ";
         }
 
         return conflits;
